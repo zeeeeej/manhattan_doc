@@ -21,6 +21,10 @@
 #include "data.h"
 #include "mpu6887p.h"
 #include "heat.h"
+#include <inttypes.h>
+#include <stdio.h>
+#include <stdint.h>
+#include <sys/statvfs.h>
 
 #ifdef LOG_TAG
 #undef LOG_TAG
@@ -39,6 +43,49 @@ char *rkipc_iq_file_path_ = NULL;
 static void sig_proc(int signo) {
 	LOG_INFO("received signo %d \n", signo);
 	g_main_run_ = 0;
+}
+
+// 获取磁盘空间信息（单位：字节）
+static void get_disk_space(const char* path, uint64_t* total, uint64_t* free) {
+    struct statvfs stat;
+
+    if (statvfs(path, &stat) == 0) {
+        *total = (uint64_t)stat.f_blocks * stat.f_frsize;
+        *free = (uint64_t)stat.f_bfree * stat.f_frsize;
+    } else {
+        *total = *free = 0;
+    }
+}
+
+static void debug(){
+	printf("==============app_info================\n");
+	FILE* cpuinfo = fopen("/proc/cpuinfo", "r");
+    if (cpuinfo) {
+        char line[256];
+        while (fgets(line, sizeof(line), cpuinfo)) {
+            if (strstr(line, "model name")) {
+                printf("CPU: %s", strchr(line, ':') + 2);
+                break;
+            }
+        }
+        fclose(cpuinfo);
+    }
+	// 获取磁盘空间
+    uint64_t disk_total, disk_free;
+    get_disk_space("/", &disk_total, &disk_free); // Linux/macOS用"/"，Windows可以用"C:"
+    
+    printf("磁盘空间信息:\n");
+    printf("总空间: %.2f GB\n", (double)disk_total / (1024 * 1024 * 1024));
+    printf("可用空间: %.2f GB\n", (double)disk_free / (1024 * 1024 * 1024));
+    
+    // 获取内存信息
+    uint64_t mem_total, mem_free;
+    get_memory_info(&mem_total, &mem_free);
+    
+    printf("\n内存信息:\n");
+    printf("总内存: %.2f GB\n", (double)mem_total / (1024 * 1024 * 1024));
+    printf("可用内存: %.2f GB\n", (double)mem_free / (1024 * 1024 * 1024));
+	printf("==============app_info================\n");
 }
 
 static const char short_options[] = "c:a:l:";
