@@ -79,7 +79,7 @@ void rkipc_get_opt(int argc, char *argv[]) {
 			rkipc_iq_file_path_ = optarg;
 			break;
 		case 'l':
-			rkipc_log_level = atoi(optarg);
+			// rkipc_log_level = atoi(optarg);
 			break;
 		case 'h':
 			usage_tip(stdout, argc, argv);
@@ -156,10 +156,18 @@ int main(int argc, char **argv) {
 	signal(SIGINT, sig_proc);
 	signal(SIGTERM, sig_proc);
 
+	printf("hello hadlinks !!!!!! \n");
+	printf("hello hadlinks !!!!!! \n");
+	printf("hello hadlinks !!!!!! \n");
+	printf("hello hadlinks !!!!!! \n");
+	printf("hello hadlinks !!!!!! \n");
+	printf("hello hadlinks !!!!!! \n");
+	printf("hello hadlinks !!!!!! \n");
+
 	rkipc_get_opt(argc, argv);
-	LOG_INFO("rkipc_ini_path_ is %s, rkipc_iq_file_path_ is %s, rkipc_log_level "
-	         "is %d~~~~~~~~~~~~\n",
-	         rkipc_ini_path_, rkipc_iq_file_path_, rkipc_log_level);
+	// LOG_INFO("rkipc_ini_path_ is %s, rkipc_iq_file_path_ is %s, rkipc_log_level "
+	//          "is %d~~~~~~~~~~~~\n",
+	//          rkipc_ini_path_, rkipc_iq_file_path_, rkipc_log_level);
 	
     if(access(path, F_OK) == 0) {
         LOG_INFO("Directory exists.\n");
