@@ -21,6 +21,8 @@
 #include "data.h"
 #include "mpu6887p.h"
 #include "heat.h"
+#include "rk_mpi_sys.h"
+
 
 #ifdef LOG_TAG
 #undef LOG_TAG
