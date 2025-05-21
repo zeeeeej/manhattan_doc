@@ -29,10 +29,10 @@
 #endif
 #define LOG_TAG "rkipc.c"
 
-//enum { LOG_ERROR, LOG_WARN, LOG_INFO, LOG_DEBUG };
+enum { LOG_ERROR, LOG_WARN, LOG_INFO, LOG_DEBUG };
 
-//int enable_minilog = 0;
-//int rkipc_log_level = LOG_INFO;
+int enable_minilog = 0;
+int rkipc_log_level = LOG_INFO;
 
 static int g_main_run_ = 1;
 char *rkipc_ini_path_ = NULL;
@@ -81,7 +81,7 @@ void rkipc_get_opt(int argc, char *argv[]) {
 			rkipc_iq_file_path_ = optarg;
 			break;
 		case 'l':
-			// rkipc_log_level = atoi(optarg);
+			rkipc_log_level = atoi(optarg);
 			break;
 		case 'h':
 			usage_tip(stdout, argc, argv);
@@ -167,9 +167,9 @@ int main(int argc, char **argv) {
 	printf("hello hadlinks !!!!!! \n");
 
 	rkipc_get_opt(argc, argv);
-	// LOG_INFO("rkipc_ini_path_ is %s, rkipc_iq_file_path_ is %s, rkipc_log_level "
-	//          "is %d~~~~~~~~~~~~\n",
-	//          rkipc_ini_path_, rkipc_iq_file_path_, rkipc_log_level);
+	LOG_INFO("rkipc_ini_path_ is %s, rkipc_iq_file_path_ is %s, rkipc_log_level "
+	         "is %d~~~~~~~~~~~~\n",
+	         rkipc_ini_path_, rkipc_iq_file_path_, rkipc_log_level);
 	
     if(access(path, F_OK) == 0) {
         LOG_INFO("Directory exists.\n");
