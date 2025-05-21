@@ -9,6 +9,7 @@
 #include "log.h"
 #include "network.h"
 #include "param.h"
+#include "rk_mpi_sys.h"
 #include "rockiva.h"
 //#include "server.h"
 #include "storage.h"
@@ -105,7 +106,7 @@ static void *wait_key_event(void *arg) {
 	struct input_event key_event;
 
 	while (g_main_run_) {
-		// The rfds collection must be emptied every time,
+		// The rfds collection must be emptied every time,A
 		// otherwise the descriptor changes cannot be detected
 		timeout.tv_sec = 1;
 		FD_ZERO(&rfds);

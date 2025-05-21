@@ -1,3 +1,0 @@
-/data/workspace/test/app_sdk_v0.0.3/build/CMakeFiles/rebuild_cache.dir
-/data/workspace/test/app_sdk_v0.0.3/build/CMakeFiles/edit_cache.dir
-/data/workspace/test/app_sdk_v0.0.3/build/CMakeFiles/ipc_app.dir
