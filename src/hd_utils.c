@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdarg.h>
-#include "../include/hd_uart/hd_utils.h"
+#include "../include/hd_utils.h"
 
 static HDLoggerLevel g_HDLoggerLevel = HD_LOGGER_LEVEL_INFO;
 

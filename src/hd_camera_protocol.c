@@ -2,8 +2,8 @@
 #include <stdlib.h>
 #include <stdint.h>
 #include <string.h>
-#include "../include/hd_uart/hd_utils.h"
-#include "../include/hd_uart/hd_camera_protocol.h"
+#include "../include/hd_utils.h"
+#include "../include/hd_camera_protocol.h"
 
 static void hd_camera_protocol_print_buffer(const unsigned char *buf, size_t len, const char *tag) {
     hd_printf_buff(buf,len,tag,0);

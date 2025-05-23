@@ -7,11 +7,10 @@
 #include <sys/stat.h>
 #include <stdlib.h>
 #include <ctype.h>
-#include "../include/hd_uart/hd_uart_parser.h"
-#include "../include/hd_uart/hd_camera_protocol.h"
-#include "../include/hd_uart/hd_camera_protocol_cmd.h"
-#include "internal/cJSON.h"
-#include "../include/hd_uart/hd_utils.h"
+#include "../include/hd_uart_parser.h"
+#include "../include/hd_camera_protocol.h"
+#include "../include/hd_camera_protocol_cmd.h"
+#include "../include/hd_utils.h"
 #include <errno.h>
 #include <limits.h>
 

@@ -1,6 +1,6 @@
 #include <stdint.h>
-#include "../include/hd_uart/hd_camera_protocol.h"
-#include "../include/hd_uart/hd_camera_protocol_cmd.h"
+#include "../include/hd_camera_protocol.h"
+#include "../include/hd_camera_protocol_cmd.h"
 
 // 属性ID TODO
 static  struct {
