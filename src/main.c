@@ -16,11 +16,12 @@
 //#include "video.h"
 #include "photo.h"
 #include <linux/input.h>
-
+#include <rk_mpi_sys.h>
 #include "uart.h"
 #include "data.h"
 #include "mpu6887p.h"
 #include "heat.h"
+#include <485.h>
 
 #ifdef LOG_TAG
 #undef LOG_TAG
@@ -93,17 +94,23 @@ void rkipc_get_opt(int argc, char *argv[]) {
 
 #define AO_FREAD_SIZE 1024 * 4
 static void *test_485_send(void *arg) {
-
+	int index = 0;
+ 	LOG_INFO("test_485_send %02X\n", index);
+	
 	while (g_main_run_) {
 		// The rfds collection must be emptied every time,
 		// otherwise the descriptor changes cannot be detected
 		rs485_pwr_on();
 		usleep(9000);
-		rk_uart_sendbyte(0xAA);
+		rk_uart_sendbyte(0xCC);
 		usleep(4000);
 		rs485_pwr_off();
 		sleep(1);
+		index++;
+		LOG_INFO("----->%02x\n",index	);
+		if(index>5)break;
 	}
+	LOG_INFO("send test completed !"	);
 
 	return NULL;
 }
