@@ -27,6 +27,7 @@
 #undef LOG_TAG
 #endif
 #define LOG_TAG "rkipc.c"
+#include <hd_uart_parser.h>
 
 /*enum { LOG_ERROR, LOG_WARN, LOG_INFO, LOG_DEBUG };
 
@@ -115,6 +116,10 @@ static void *test_485_send(void *arg) {
 	return NULL;
 }
 
+static  void on_action_id_changed(const char *action_id_str){
+	LOG_INFO("on_action_id_changed : %s !"	,action_id_str);
+}
+
 void cus_recv(uint8_t str)
 {
 	LOG_INFO("cus_recv %02X\n", str);
@@ -128,7 +133,7 @@ int main(int argc, char **argv) {
 	signal(SIGINT, sig_proc);
 	signal(SIGTERM, sig_proc);
 
-	recv_callback_func func = {qjy_uart_parser, cus_recv};
+	recv_callback_func func = {qjy_uart_parser, hd_uart_recv};
 
 	rkipc_get_opt(argc, argv);
 	LOG_INFO("rkipc_ini_path_ is %s, rkipc_iq_file_path_ is %s, rkipc_log_level "
@@ -173,9 +178,10 @@ int main(int argc, char **argv) {
 	//	rkipc_audio_init();
 	//rkipc_server_init();
 	//rk_storage_init();
-	pthread_create(&key_chk, NULL, test_485_send, NULL);
+	//pthread_create(&key_chk, NULL, test_485_send, NULL);
 	//pthread_sem_init();
 	qjy_uart_init(&func, 1);
+	hd_uart_init(0x01,"/userdata/hadlinsk_pic",on_action_id_changed);
 	gsensor_init();
 	qjy_photo_init();
 	heat_pwm_init();
@@ -211,6 +217,7 @@ int main(int argc, char **argv) {
 	//rk_network_deinit();
 	pthread_sem_deinit();
 	qjy_uart_deinit();
+	hd_uart_deinit();
 	gsensor_deinit();
 	//heat_pwm_deinit();
 	
