@@ -27,7 +27,8 @@
 #undef LOG_TAG
 #endif
 #define LOG_TAG "rkipc.c"
-#include <hd_uart_parser.h>
+#include "hd_uart_parser.h"
+#include <hd_camera_protocol.h>
 
 /*enum { LOG_ERROR, LOG_WARN, LOG_INFO, LOG_DEBUG };
 
@@ -37,6 +38,7 @@ int rkipc_log_level = LOG_INFO;*/
 static int g_main_run_ = 1;
 char *rkipc_ini_path_ = NULL;
 char *rkipc_iq_file_path_ = NULL;
+static int g_addr = PROTOCOL_SLAVE_DYNAMIC;
 
 static void sig_proc(int signo) {
 	LOG_INFO("received signo %d \n", signo);
@@ -120,15 +122,23 @@ static  void on_action_id_changed(const char *action_id_str){
 	LOG_INFO("on_action_id_changed : %s !"	,action_id_str);
 }
 
+static void* on_event(int  event_id,void * event_value,size_t event_value_size){
+	LOG_INFO("on_event : %d !"	,event_id);
+	return NULL;
+}
+
+
 void cus_recv(uint8_t str)
 {
 	LOG_INFO("cus_recv %02X\n", str);
 }
 
+#define HD_VERSION "0.0.1"
+
 int main(int argc, char **argv) {
 	pthread_t key_chk;
 	const char* path = "/userdata/jpeg";
-	LOG_DEBUG("main begin\n");
+	LOG_DEBUG("-->hdlinks-app version:%s ,addr:%d \n",HD_VERSION,g_addr);
 	rkipc_version_dump();
 	signal(SIGINT, sig_proc);
 	signal(SIGTERM, sig_proc);
@@ -180,8 +190,10 @@ int main(int argc, char **argv) {
 	//rk_storage_init();
 	//pthread_create(&key_chk, NULL, test_485_send, NULL);
 	//pthread_sem_init();
-	qjy_uart_init(&func, 1);
-	hd_uart_init(0x01,"/userdata/hadlinsk_pic",on_action_id_changed);
+
+	qjy_uart_init(&func, g_addr);
+	char * img_path = g_addr==PROTOCOL_SLAVE_DYNAMIC?"/userdata/hd_demo/static":"/userdata/hd_demo/dynamic";
+	hd_uart_init(g_addr,img_path,on_action_id_changed,on_event);
 	gsensor_init();
 	qjy_photo_init();
 	heat_pwm_init();
@@ -217,8 +229,9 @@ int main(int argc, char **argv) {
 	//rk_network_deinit();
 	pthread_sem_deinit();
 	qjy_uart_deinit();
-	hd_uart_deinit();
 	gsensor_deinit();
+	hd_uart_deinit();
+	
 	//heat_pwm_deinit();
 	
 

@@ -21,6 +21,8 @@ typedef enum {
 // 设置日志级别
 void hd_logger_set_level(HDLoggerLevel level);
 
+HDLoggerLevel hd_logger_set_level_cur();
+
 // 日志打印函数
 void hd_logger_print(HDLoggerLevel level, const char *tag, const char *msg, ...);
 
