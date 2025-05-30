@@ -1,0 +1,3 @@
+/home/book/zc/app_sdk_v0.0.2.git/manhattan_doc/build/CMakeFiles/rebuild_cache.dir
+/home/book/zc/app_sdk_v0.0.2.git/manhattan_doc/build/CMakeFiles/ipc_app.dir
+/home/book/zc/app_sdk_v0.0.2.git/manhattan_doc/build/CMakeFiles/edit_cache.dir

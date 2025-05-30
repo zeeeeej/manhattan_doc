@@ -11,4 +11,4 @@ include_directories (include)
 link_directories(${PROJECT_SOURCE_DIR}/libs)
 
 add_executable(ipc_app ${SRCS})
-target_link_libraries(ipc_app pthread rockit rockchip_mpp rkaiq aec_bf_process rkaudio_common m freetype rockiva iconv rknnmrt rga stdc++ rksysutils app_shared)
+target_link_libraries(ipc_app hd_uart pthread rockit rockchip_mpp rkaiq aec_bf_process rkaudio_common m freetype rockiva iconv rknnmrt rga stdc++ rksysutils app_shared)
