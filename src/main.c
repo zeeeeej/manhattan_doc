@@ -16,16 +16,22 @@
 //#include "video.h"
 #include "photo.h"
 #include <linux/input.h>
-
+#include <rk_mpi_sys.h>
 #include "uart.h"
 #include "data.h"
 #include "mpu6887p.h"
 #include "heat.h"
+#include <485.h>
+#include <thread>
+#include "hd_uart_parser.h"
+#include <hd_camera_protocol.h>
+
 
 #ifdef LOG_TAG
 #undef LOG_TAG
 #endif
 #define LOG_TAG "rkipc.c"
+
 
 /*enum { LOG_ERROR, LOG_WARN, LOG_INFO, LOG_DEBUG };
 
@@ -35,6 +41,8 @@ int rkipc_log_level = LOG_INFO;*/
 static int g_main_run_ = 1;
 char *rkipc_ini_path_ = NULL;
 char *rkipc_iq_file_path_ = NULL;
+
+static int g_addr = PROTOCOL_SLAVE_DYNAMIC;
 
 static void sig_proc(int signo) {
 	LOG_INFO("received signo %d \n", signo);
@@ -92,25 +100,34 @@ void rkipc_get_opt(int argc, char *argv[]) {
 }
 
 #define AO_FREAD_SIZE 1024 * 4
-static void *test_485_send(void *arg) {
+// static void *test_485_send(void *arg) {
 
-	while (g_main_run_) {
-		// The rfds collection must be emptied every time,
-		// otherwise the descriptor changes cannot be detected
-		rs485_pwr_on();
-		usleep(9000);
-		rk_uart_sendbyte(0xAA);
-		usleep(4000);
-		rs485_pwr_off();
-		sleep(1);
-	}
+// 	while (g_main_run_) {
+// 		// The rfds collection must be emptied every time,
+// 		// otherwise the descriptor changes cannot be detected
+// 		rs485_pwr_on();
+// 		usleep(9000);
+// 		rk_uart_sendbyte(0xAA);
+// 		usleep(4000);
+// 		rs485_pwr_off();
+// 		sleep(1);
+// 	}
 
-	return NULL;
+// 	return NULL;
+// }
+
+// void cus_recv(uint8_t str)
+// {
+// 	LOG_INFO("cus_recv %02X\n", str);
+// }
+
+static  void on_action_id_changed(const char *action_id_str){
+	LOG_INFO("on_action_id_changed : %s !"	,action_id_str);
 }
 
-void cus_recv(uint8_t str)
-{
-	LOG_INFO("cus_recv %02X\n", str);
+static void* on_event(int  event_id,void * event_value,size_t event_value_size){
+	LOG_INFO("on_event : %d !"	,event_id);
+	return NULL;
 }
 
 int main(int argc, char **argv) {
@@ -121,7 +138,7 @@ int main(int argc, char **argv) {
 	signal(SIGINT, sig_proc);
 	signal(SIGTERM, sig_proc);
 
-	recv_callback_func func = {qjy_uart_parser, cus_recv};
+	recv_callback_func func = {qjy_uart_parser, hd_uart_recv};
 
 	rkipc_get_opt(argc, argv);
 	LOG_INFO("rkipc_ini_path_ is %s, rkipc_iq_file_path_ is %s, rkipc_log_level "
@@ -166,7 +183,7 @@ int main(int argc, char **argv) {
 	//	rkipc_audio_init();
 	//rkipc_server_init();
 	//rk_storage_init();
-	pthread_create(&key_chk, NULL, test_485_send, NULL);
+	// pthread_create(&key_chk, NULL, test_485_send, NULL);
 	//pthread_sem_init();
 	qjy_uart_init(&func, 1);
 	gsensor_init();
@@ -182,6 +199,16 @@ int main(int argc, char **argv) {
 	LOG_INFO("~~%d, %s~~\n", rk_param_get_int("qjy.1:address", 1), rk_param_get_string("qjy.1:serial_num", NULL));
 	sleep(2);
 	qjy_take_photo(1);*/
+
+	char * img_path = g_addr==PROTOCOL_SLAVE_DYNAMIC?"/userdata/hd_demo":"/userdata/hd_demo";
+	hd_uart_init(g_addr,img_path,on_action_id_changed,on_event);
+
+	// 创建并启动线程
+	std::thread angel_thread_t(angel_thread);
+
+	// 等待线程结束（如果不调用 join，主线程结束可能导致程序崩溃）
+	angel_thread_t.join();
+
 	while (g_main_run_) {
 		usleep(1000 * 1000);
 	}

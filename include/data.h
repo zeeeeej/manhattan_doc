@@ -7,9 +7,9 @@
 
 #define bswap_16(A) (( ((uint16_t)(A) & 0xff00) >> 8) | (( (uint16_t)(A) & 0x00ff) << 8))  
  
-#define bswap_32(A) ((( (uint32_t)(A) & 0xff000000) >> 24) | \ 
-                          (( (uint32_t)(A) & 0x00ff0000) >> 8)  | \ 
-                          (( (uint32_t)(A) & 0x0000ff00) << 8)  | \ 
+#define bswap_32(A) ((( (uint32_t)(A) & 0xff000000) >> 24) | \
+                          (( (uint32_t)(A) & 0x00ff0000) >> 8)  | \
+                          (( (uint32_t)(A) & 0x0000ff00) << 8)  | \
                           (( (uint32_t)(A) & 0x000000ff) << 24)) 
 
 
@@ -27,7 +27,7 @@ typedef struct
     uint8_t md5[16];
 }PICTURE_INFO;
 
-const static char __APP_VERSION__[] = "0.4.6";
+const static char __APP_VERSION__[] = "0.4.9";
 
 sem_t image_sem, uart_sem;
 
