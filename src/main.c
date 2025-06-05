@@ -21,6 +21,8 @@
 #include "data.h"
 #include "mpu6887p.h"
 #include "heat.h"
+#include "rs485.h"
+#include "rk_mpi_sys.h"
 
 #ifdef LOG_TAG
 #undef LOG_TAG
@@ -166,7 +168,7 @@ int main(int argc, char **argv) {
 	//	rkipc_audio_init();
 	//rkipc_server_init();
 	//rk_storage_init();
-	pthread_create(&key_chk, NULL, test_485_send, NULL);
+	//pthread_create(&key_chk, NULL, test_485_send, NULL);
 	//pthread_sem_init();
 	qjy_uart_init(&func, 1);
 	gsensor_init();
