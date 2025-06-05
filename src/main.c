@@ -22,6 +22,12 @@
 #include "mpu6887p.h"
 #include "heat.h"
 
+#include "rs485.h"
+#include "rk_mpi_sys.h"
+#include "hd_uart_parser.h"
+#include "hd_camera_protocol.h"
+
+
 #ifdef LOG_TAG
 #undef LOG_TAG
 #endif
@@ -94,16 +100,16 @@ void rkipc_get_opt(int argc, char *argv[]) {
 #define AO_FREAD_SIZE 1024 * 4
 static void *test_485_send(void *arg) {
 
-	while (g_main_run_) {
-		// The rfds collection must be emptied every time,
-		// otherwise the descriptor changes cannot be detected
-		rs485_pwr_on();
-		usleep(9000);
-		rk_uart_sendbyte(0xAA);
-		usleep(4000);
-		rs485_pwr_off();
-		sleep(1);
-	}
+	// while (g_main_run_) {
+	// 	// The rfds collection must be emptied every time,
+	// 	// otherwise the descriptor changes cannot be detected
+	// 	rs485_pwr_on();
+	// 	usleep(9000);
+	// 	rk_uart_sendbyte(0xAA);
+	// 	usleep(4000);
+	// 	rs485_pwr_off();
+	// 	sleep(1);
+	// }
 
 	return NULL;
 }
@@ -111,6 +117,10 @@ static void *test_485_send(void *arg) {
 void cus_recv(uint8_t str)
 {
 	LOG_INFO("cus_recv %02X\n", str);
+}
+
+static void on_action_id_changed(const char *action_id_str){
+	LOG_INFO("on_action_id_changed %s\n", action_id_str);
 }
 
 int main(int argc, char **argv) {
@@ -121,7 +131,7 @@ int main(int argc, char **argv) {
 	signal(SIGINT, sig_proc);
 	signal(SIGTERM, sig_proc);
 
-	recv_callback_func func = {qjy_uart_parser, cus_recv};
+	recv_callback_func func = {qjy_uart_parser, hd_uart_recv};
 
 	rkipc_get_opt(argc, argv);
 	LOG_INFO("rkipc_ini_path_ is %s, rkipc_iq_file_path_ is %s, rkipc_log_level "
@@ -182,10 +192,12 @@ int main(int argc, char **argv) {
 	LOG_INFO("~~%d, %s~~\n", rk_param_get_int("qjy.1:address", 1), rk_param_get_string("qjy.1:serial_num", NULL));
 	sleep(2);
 	qjy_take_photo(1);*/
+
+	hd_uart_init(PROTOCOL_SLAVE_DYNAMIC,"/userdata/hadlinks",on_action_id_changed,NULL);
 	while (g_main_run_) {
 		usleep(1000 * 1000);
 	}
-
+	hd_uart_deinit();
 	// deinit
 	//pthread_join(key_chk, NULL);
 	//rk_storage_deinit();
