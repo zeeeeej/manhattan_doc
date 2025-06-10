@@ -197,10 +197,10 @@ int main(int argc, char **argv) {
 	qjy_take_photo(1);*/
 
 	hd_uart_init(PROTOCOL_SLAVE_DYNAMIC,"/userdata/hadlinks",on_action_id_changed,NULL);
-	int angel = 0;
+	//int angel = 0;
 	while (g_main_run_) {
-		angel = get_angle();
-		printf("get_angle : %d\n",angel);
+		//angel = get_angle();
+		//printf("get_angle : %d\n",angel);
 		usleep(1000 * 1000);
 	}
 	hd_uart_deinit();
