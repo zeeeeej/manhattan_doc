@@ -179,7 +179,10 @@ int main(int argc, char **argv) {
 	pthread_create(&key_chk, NULL, test_485_send, NULL);
 	//pthread_sem_init();
 	qjy_uart_init(&func, 2);
-	gsensor_init();
+	
+	// gsensor_init();
+	gsensor_capture_init();
+
 	qjy_photo_init();
 	heat_pwm_init();
 	/*sleep(2);
@@ -219,7 +222,10 @@ int main(int argc, char **argv) {
 	//rk_network_deinit();
 	pthread_sem_deinit();
 	qjy_uart_deinit();
-	gsensor_deinit();
+	
+	gsensor_capture_deinit();
+	// gsensor_deinit();
+
 	//heat_pwm_deinit();
 	
 
