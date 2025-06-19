@@ -178,7 +178,8 @@ int main(int argc, char **argv) {
 	//rk_storage_init();
 	pthread_create(&key_chk, NULL, test_485_send, NULL);
 	//pthread_sem_init();
-	qjy_uart_init(&func, 2);
+	uint8_t addr = PROTOCOL_SLAVE_STATIC;
+	qjy_uart_init(&func, addr);
 	
 	// gsensor_init();
 	gsensor_capture_init();
@@ -196,7 +197,7 @@ int main(int argc, char **argv) {
 	sleep(2);
 	qjy_take_photo(1);*/
 
-	hd_uart_init(PROTOCOL_SLAVE_DYNAMIC,"/userdata/hadlinks",on_action_id_changed,NULL);
+	hd_uart_init(addr,"/userdata/hadlinks",on_action_id_changed,NULL);
 	//int angel = 0;
 	while (g_main_run_) {
 		//angel = get_angle();
