@@ -113,6 +113,7 @@ void cus_recv(uint8_t str)
 {
 	LOG_INFO("cus_recv %02X\n", str);
 	 printf("收到%02x\n", str);
+	 usleep(100);
     int size = 200000;
     printf("开始发送\n");
     rs485_pwr_on();
@@ -183,9 +184,11 @@ int main(int argc, char **argv) {
 	//rk_storage_init();
 	// pthread_create(&key_chk, NULL, test_485_send, NULL);
 	//pthread_sem_init();
-	qjy_uart_init(&func, 1);
+	int ret = qjy_uart_init(&func, 1);
+	printf("qjy_uart_init = %d \n",ret);
 	gsensor_init(0);
-	qjy_photo_init();
+	 qjy_photo_init();
+	
 	heat_pwm_init();
 	/*sleep(2);
 	LOG_INFO("~~%d, %s~~\n", rk_param_get_int("qjy.1:address", 1), rk_param_get_string("qjy.1:serial_num", NULL));
