@@ -19,7 +19,7 @@
 
 
 #include "uart.h"
-#include "dagitta.h"
+// #include "dagitta.h"
 #include "mpu6887p.h"
 #include "heat.h"
 
@@ -112,7 +112,7 @@ static void *test_485_send(void *arg) {
 void cus_recv(uint8_t str)
 {
 	LOG_INFO("cus_recv %02X\n", str);
-	 printf("收到%02x\n", byte);
+	 printf("收到%02x\n", str);
     int size = 200000;
     printf("开始发送\n");
     rs485_pwr_on();
@@ -130,7 +130,7 @@ void cus_recv(uint8_t str)
 int main(int argc, char **argv) {
 	pthread_t key_chk;
 	const char* path = "/userdata/jpeg";
-	printf("======0.0.6-debug-rk-uart-sendbyte\n ======");
+	printf("======0.0.6-debug-rk-uart-sendbyte <002>\n ======");
 	LOG_DEBUG("main begin\n");
 	rkipc_version_dump();
 	signal(SIGINT, sig_proc);
@@ -181,10 +181,10 @@ int main(int argc, char **argv) {
 	//	rkipc_audio_init();
 	//rkipc_server_init();
 	//rk_storage_init();
-	pthread_create(&key_chk, NULL, test_485_send, NULL);
+	// pthread_create(&key_chk, NULL, test_485_send, NULL);
 	//pthread_sem_init();
 	qjy_uart_init(&func, 1);
-	gsensor_init();
+	gsensor_init(0);
 	qjy_photo_init();
 	heat_pwm_init();
 	/*sleep(2);

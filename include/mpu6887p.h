@@ -18,7 +18,7 @@ enum parameter
 };
 
 int get_input_number();
-int gsensor_init();
+int gsensor_init(uint8_t rot);
 int gsensor_deinit();
 int gsensor_capture_init();
 int gsensor_capture_deinit();
