@@ -1,0 +1,3 @@
+/Users/xiangpengle/Documents/job/manhattan/存档/app_sdk_v0.0.6/build/CMakeFiles/ipc_app.dir
+/Users/xiangpengle/Documents/job/manhattan/存档/app_sdk_v0.0.6/build/CMakeFiles/edit_cache.dir
+/Users/xiangpengle/Documents/job/manhattan/存档/app_sdk_v0.0.6/build/CMakeFiles/rebuild_cache.dir
