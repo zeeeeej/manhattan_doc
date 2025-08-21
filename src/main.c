@@ -109,21 +109,24 @@ static void *test_485_send(void *arg) {
 	return NULL;
 }
 
-void cus_recv(uint8_t str)
+static void cus_recv(uint8_t str)
 {
 	LOG_INFO("cus_recv %02X\n", str);
-	 printf("收到%02x\n", str);
-	 usleep(100);
-    int size = 200000;
+	printf("收到%02x\n", str);
+	usleep(100);
+  
     printf("开始发送\n");
+
     rs485_pwr_on();
     usleep(9000);
+	  int size = 200000;
     for (size_t i = 0; i < size; ++i) {
         rk_uart_sendbyte(0xfe);
         //usleep(0);
     }
     usleep(4000);
     rs485_pwr_off();
+
     printf("发送完毕\n");
 
 }
@@ -131,13 +134,11 @@ void cus_recv(uint8_t str)
 int main(int argc, char **argv) {
 	pthread_t key_chk;
 	const char* path = "/userdata/jpeg";
-	printf("======0.0.6-debug-rk-uart-sendbyte <002>\n ======");
+	printf("======0.0.6-debug-rk-uart-sendbyte <003>\n ======");
 	LOG_DEBUG("main begin\n");
 	rkipc_version_dump();
 	signal(SIGINT, sig_proc);
 	signal(SIGTERM, sig_proc);
-
-	recv_callback_func func = {qjy_uart_parser, cus_recv};
 
 	rkipc_get_opt(argc, argv);
 	LOG_INFO("rkipc_ini_path_ is %s, rkipc_iq_file_path_ is %s, rkipc_log_level "
@@ -184,6 +185,7 @@ int main(int argc, char **argv) {
 	//rk_storage_init();
 	// pthread_create(&key_chk, NULL, test_485_send, NULL);
 	//pthread_sem_init();
+	recv_callback_func func = {qjy_uart_parser, cus_recv};
 	int ret = qjy_uart_init(&func, 1);
 	printf("qjy_uart_init = %d \n",ret);
 	gsensor_init(0);
@@ -223,7 +225,7 @@ int main(int argc, char **argv) {
 	pthread_sem_deinit();
 	qjy_uart_deinit();
 	gsensor_deinit();
-	//heat_pwm_deinit();
+	heat_pwm_deinit();
 	
 
 	return 0;
