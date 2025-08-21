@@ -19,6 +19,9 @@
 
 
 #include "uart.h"
+#include "485.h"
+#include "rk_mpi_sys.h"
+#include <semaphore.h>
 // #include "dagitta.h"
 #include "mpu6887p.h"
 #include "heat.h"
@@ -109,7 +112,7 @@ static void *test_485_send(void *arg) {
 	return NULL;
 }
 
-static void cus_recv(uint8_t str)
+static void my_cus_recv(uint8_t str)
 {
 	LOG_INFO("cus_recv %02X\n", str);
 	printf("收到%02x\n", str);
@@ -132,7 +135,7 @@ static void cus_recv(uint8_t str)
 }
 
 int main(int argc, char **argv) {
-	pthread_t key_chk;
+	//pthread_t key_chk;
 	const char* path = "/userdata/jpeg";
 	printf("======0.0.6-debug-rk-uart-sendbyte <003>\n ======");
 	LOG_DEBUG("main begin\n");
@@ -180,18 +183,18 @@ int main(int argc, char **argv) {
 	RK_MPI_SYS_Init();
 	//rk_video_init();
 	//if (rk_param_get_int("audio.0:enable", 0))
-	//	rkipc_audio_init();
+	//rkipc_audio_init();
 	//rkipc_server_init();
 	//rk_storage_init();
-	// pthread_create(&key_chk, NULL, test_485_send, NULL);
+	//pthread_create(&key_chk, NULL, test_485_send, NULL);
 	//pthread_sem_init();
-	recv_callback_func func = {qjy_uart_parser, cus_recv};
+	recv_callback_func func = {qjy_uart_parser, my_cus_recv};
 	int ret = qjy_uart_init(&func, 1);
 	printf("qjy_uart_init = %d \n",ret);
 	gsensor_init(0);
-	 qjy_photo_init();
-	
+	qjy_photo_init();
 	heat_pwm_init();
+
 	/*sleep(2);
 	LOG_INFO("~~%d, %s~~\n", rk_param_get_int("qjy.1:address", 1), rk_param_get_string("qjy.1:serial_num", NULL));
 	sleep(2);
@@ -222,7 +225,7 @@ int main(int argc, char **argv) {
 	//if (rk_param_get_int("video.source:enable_npu", 0))
 	//	rkipc_rockiva_deinit();
 	//rk_network_deinit();
-	pthread_sem_deinit();
+	// pthread_sem_deinit();
 	qjy_uart_deinit();
 	gsensor_deinit();
 	heat_pwm_deinit();
