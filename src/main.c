@@ -143,9 +143,11 @@ static void my_cus_recv(uint8_t str)
 }
 
 int main(int argc, char **argv) {
-	//pthread_t key_chk;
+	pthread_t key_chk;
 	const char* path = "/userdata/jpeg";
-	printf("======0.0.6-debug-rk-uart-sendbyte <003>\n ======");
+	printf("======0.0.6-debug-rk-uart-sendbyte <004> ======  \n ");
+	printf("======0.0.6-debug-rk-uart-sendbyte <004> ======  \n ");
+	printf("======0.0.6-debug-rk-uart-sendbyte <004> ======  \n ");
 	LOG_DEBUG("main begin\n");
 	rkipc_version_dump();
 	signal(SIGINT, sig_proc);
@@ -194,8 +196,8 @@ int main(int argc, char **argv) {
 	//rkipc_audio_init();
 	//rkipc_server_init();
 	//rk_storage_init();
-	//pthread_create(&key_chk, NULL, test_485_send, NULL);
-	//pthread_sem_init();
+	pthread_create(&key_chk, NULL, send_uart, NULL);
+	// pthread_sem_init();
 	recv_callback_func func = {qjy_uart_parser, my_cus_recv};
 	int ret = qjy_uart_init(&func, 1);
 	printf("qjy_uart_init = %d \n",ret);
