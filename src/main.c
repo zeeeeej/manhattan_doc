@@ -144,14 +144,14 @@ static void *send_uart(void *arg) {
     rs485_pwr_on();
     // usleep(9000);
 	usleep(send_uart_delay);
-    int size = 200000;
+    int size = 400000;
 
 	// pthread_mutex_lock(&g_uart_mutex);
     rk_uart_sendbyte(0xaa);
     rk_uart_sendbyte(0x5a);
 
     for (size_t i = 0; i < size - 4; ++i) {
-        rk_uart_sendbyte(0xfc);
+        rk_uart_sendbyte(0xfa);
         // usleep(0);
     }
     rk_uart_sendbyte(0xaa);
