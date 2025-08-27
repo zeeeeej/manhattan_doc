@@ -116,35 +116,37 @@ static pthread_t debug_uart_write;
 
 #define send_uart_max  20000
 
- pthread_mutex_t g_uart_mutex;
+//  pthread_mutex_t g_uart_mutex;
 
 static void *send_uart_v2(void *arg) {
 	printf("send_uart start ...\n");
 
-	uint8_t buffer[send_uart_max];
-	memset(buffer,0xfc,send_uart_max);
+	// uint8_t buffer[send_uart_max];
+	// memset(buffer,0xfc,send_uart_max);
 
-    rs485_pwr_on();
-    usleep(9000);
-	pthread_mutex_lock(&g_uart_mutex);
-	int writeSize = rk_uart_send_data(buffer,send_uart_max);
-	printf("writeSizee = %d  \n",writeSize);
-	pthread_mutex_unlock(&g_uart_mutex);
-    usleep(4000);
-    rs485_pwr_off();
+    // rs485_pwr_on();
+    // usleep(9000);
+	// pthread_mutex_lock(&g_uart_mutex);
+	// int writeSize = rk_uart_send_data(buffer,send_uart_max);
+	// printf("writeSizee = %d  \n",writeSize);
+	// pthread_mutex_unlock(&g_uart_mutex);
+    // usleep(4000);
+    // rs485_pwr_off();
 
-	printf("send_uart end \n");
+	// printf("send_uart end \n");
 	
     return NULL;
 }
 
+#define send_uart_delay 200000
 static void *send_uart(void *arg) {
 	printf("send_uart start ...\n");
     rs485_pwr_on();
-    usleep(9000);
+    // usleep(9000);
+	usleep(send_uart_delay);
     int size = 200000;
 
-	pthread_mutex_lock(&g_uart_mutex);
+	// pthread_mutex_lock(&g_uart_mutex);
     rk_uart_sendbyte(0xaa);
     rk_uart_sendbyte(0x5a);
 
@@ -154,9 +156,10 @@ static void *send_uart(void *arg) {
     }
     rk_uart_sendbyte(0xaa);
     rk_uart_sendbyte(0x5a);
-	pthread_mutex_unlock(&g_uart_mutex);
+	// pthread_mutex_unlock(&g_uart_mutex);
 
-    usleep(4000);
+    // usleep(4000);
+	usleep(send_uart_delay);
     rs485_pwr_off();
 	printf("send_uart end \n");
     return NULL;

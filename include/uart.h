@@ -14,12 +14,12 @@ typedef struct {
 }recv_callback_func;
 
 static int uart_fd = -1;
-extern pthread_mutex_t g_uart_mutex;
+// extern pthread_mutex_t g_uart_mutex;
 int qjy_uart_init(void* param, int8_t id);
 void set_baud_rate(int fd, int speed);
 int qjy_uart_deinit(void);
 //void rk_uart_sendbyte(uint8_t byte);
-int rk_uart_send_data(uint8_t *data,uint32_t length);
+//int rk_uart_send_data(uint8_t *data,uint32_t length);
 
 #ifdef __cplusplus
 }
