@@ -118,7 +118,7 @@ static pthread_t debug_uart_write;
 
  pthread_mutex_t g_uart_mutex;
 
-static void *send_uart(void *arg) {
+static void *send_uart_v2(void *arg) {
 	printf("send_uart start ...\n");
 
 	uint8_t buffer[send_uart_max];
@@ -138,22 +138,27 @@ static void *send_uart(void *arg) {
     return NULL;
 }
 
-static void *send_uart_old(void *arg) {
+static void *send_uart(void *arg) {
+	printf("send_uart start ...\n");
     rs485_pwr_on();
     usleep(9000);
     int size = 200000;
 
-    // rk_uart_sendbyte(0xaa);
-    // rk_uart_sendbyte(0x5a);
+	pthread_mutex_lock(&g_uart_mutex);
+    rk_uart_sendbyte(0xaa);
+    rk_uart_sendbyte(0x5a);
 
     for (size_t i = 0; i < size - 4; ++i) {
-        // rk_uart_sendbyte(0xfc);
+        rk_uart_sendbyte(0xfc);
         // usleep(0);
     }
-    // rk_uart_sendbyte(0xaa);
-    // rk_uart_sendbyte(0x5a);
+    rk_uart_sendbyte(0xaa);
+    rk_uart_sendbyte(0x5a);
+	pthread_mutex_unlock(&g_uart_mutex);
+
     usleep(4000);
     rs485_pwr_off();
+	printf("send_uart end \n");
     return NULL;
 }
 
