@@ -113,8 +113,6 @@ static void *test_485_send(void *arg) {
 }
 
 static pthread_t debug_uart_write;
-static uint8_t debug_uart_buff [1];
-
 
 #define send_uart_max  20000
 
@@ -124,12 +122,13 @@ static void *send_uart(void *arg) {
 	printf("send_uart start ...\n");
 
 	uint8_t buffer[send_uart_max];
+	memset(buffer,0xfc,send_uart_max);
 
     rs485_pwr_on();
     usleep(9000);
 	pthread_mutex_lock(&g_uart_mutex);
-	int writeSizee = rk_uart_send_data(buffer,send_uart_max);
-	printf("writeSizee = %d  \n",writeSizee);
+	int writeSize = rk_uart_send_data(buffer,send_uart_max);
+	printf("writeSizee = %d  \n",writeSize);
 	pthread_mutex_unlock(&g_uart_mutex);
     usleep(4000);
     rs485_pwr_off();
@@ -148,10 +147,8 @@ static void *send_uart_old(void *arg) {
     // rk_uart_sendbyte(0x5a);
 
     for (size_t i = 0; i < size - 4; ++i) {
-		debug_uart_buff[0] = 0xf0;
-        // rk_uart_sendbyte(debug_uart_buff);
-		
-        //usleep(0);
+        // rk_uart_sendbyte(0xfc);
+        // usleep(0);
     }
     // rk_uart_sendbyte(0xaa);
     // rk_uart_sendbyte(0x5a);
@@ -224,7 +221,7 @@ int main(int argc, char **argv) {
 	//rkipc_audio_init();
 	//rkipc_server_init();
 	//rk_storage_init();
-	pthread_create(&key_chk, NULL, send_uart, NULL);
+	
 	// pthread_sem_init();
 	recv_callback_func func = {my_cus_recv,qjy_uart_parser, };
 	int ret = qjy_uart_init(&func, 1);
@@ -243,6 +240,9 @@ int main(int argc, char **argv) {
 	LOG_INFO("~~%d, %s~~\n", rk_param_get_int("qjy.1:address", 1), rk_param_get_string("qjy.1:serial_num", NULL));
 	sleep(2);
 	qjy_take_photo(1);*/
+	sleep(1);
+	pthread_create(&key_chk, NULL, send_uart, NULL);
+
 	while (g_main_run_) {
 		usleep(1000 * 1000);
 	}
