@@ -103,7 +103,7 @@ static void *test_485_send(void *arg) {
 		// otherwise the descriptor changes cannot be detected
 		rs485_pwr_on();
 		usleep(9000);
-		rk_uart_sendbyte(0xAA);
+		// rk_uart_sendbyte(0xAA);
 		usleep(4000);
 		rs485_pwr_off();
 		// sleep(1);
@@ -133,16 +133,17 @@ static void *send_uart_old(void *arg) {
     usleep(9000);
     int size = 200000;
 
-    rk_uart_sendbyte(0xaa);
-    rk_uart_sendbyte(0x5a);
+    // rk_uart_sendbyte(0xaa);
+    // rk_uart_sendbyte(0x5a);
 
     for (size_t i = 0; i < size - 4; ++i) {
 		debug_uart_buff[0] = 0xf0;
-        rk_uart_sendbyte(debug_uart_buff);
+        // rk_uart_sendbyte(debug_uart_buff);
+		
         //usleep(0);
     }
-    rk_uart_sendbyte(0xaa);
-    rk_uart_sendbyte(0x5a);
+    // rk_uart_sendbyte(0xaa);
+    // rk_uart_sendbyte(0x5a);
     usleep(4000);
     rs485_pwr_off();
     return NULL;
