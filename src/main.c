@@ -115,16 +115,27 @@ static void *test_485_send(void *arg) {
 static pthread_t debug_uart_write;
 static uint8_t debug_uart_buff [1];
 
+
 #define send_uart_max  20000
+
+ pthread_mutex_t g_uart_mutex;
+
 static void *send_uart(void *arg) {
+	printf("send_uart start ...\n");
+
+	uint8_t buffer[send_uart_max];
+
     rs485_pwr_on();
     usleep(9000);
-    uint8_t buffer[send_uart_max];
-
-	rk_uart_send_data(buffer,send_uart_max);
-
+	pthread_mutex_lock(&g_uart_mutex);
+	int writeSizee = rk_uart_send_data(buffer,send_uart_max);
+	printf("writeSizee = %d  \n",writeSizee);
+	pthread_mutex_unlock(&g_uart_mutex);
     usleep(4000);
     rs485_pwr_off();
+
+	printf("send_uart end \n");
+	
     return NULL;
 }
 
